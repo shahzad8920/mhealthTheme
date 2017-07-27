@@ -20,22 +20,50 @@
         android:textSize="30dp"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/p_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/section_label"
         android:layout_marginTop="50dp"
+        android:text="ID:"
+        android:textColor="@color/Black"
+        android:textSize="25dp"/>
+
+    <EditText
+        android:id="@+id/edit_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/p_id"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="22dp"
+        android:layout_marginRight="22dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <TextView
+        android:id="@+id/p_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/p_id"
+        android:layout_marginTop="50dp"
         android:text="Name:"
         android:textColor="@color/Black"
         android:textSize="25dp"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignBottom="@+id/p_name"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="22dp"
@@ -44,55 +72,55 @@
         android:inputType="textPersonName"/>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/p_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:text="Address:"
         android:textColor="@color/Black"
         android:textSize="25dp"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/p_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edit_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_alignEnd="@+id/editText"
-        android:layout_alignRight="@+id/editText"
+        android:layout_alignBottom="@+id/p_address"
+        android:layout_alignEnd="@+id/edit_name"
+        android:layout_alignRight="@+id/edit_name"
         android:ems="10"
         android:inputType="textPersonName"
         />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/p_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Phone:"
         android:textColor="@color/Black"
         android:textSize="25dp"
         android:layout_marginTop="35dp"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/p_address"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/edit_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:layout_alignBottom="@+id/textView4"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignStart="@+id/editText2"/>
+        android:layout_alignBottom="@+id/p_number"
+        android:layout_alignLeft="@+id/edit_name"
+        android:layout_alignStart="@+id/edit_name"/>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/edit_number"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="84dp"
         android:background="@drawable/mybutton"

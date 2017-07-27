@@ -1,6 +1,8 @@
 package travis.thenewboston.com.mhealththeme;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -15,31 +17,33 @@ public class DBHandler extends SQLiteOpenHelper {
     //Database Version
     private static final int DATABASE_VERSION=1;
     // Database Name
-    private static final String DATABASE_NAME="Patient";
+    private static final String DATABASE_NAME="Patient.db";
     //Table Name
-    private static final String TABLE_PATIENT_DETAIL="patientDetail";
+    private static final String TABLE_NAME="patientDetail";
 
     //Table Columns Names
-    private static final String KEY_ID="id";
-    private static final String KEY_NAME="name";
-    private static final String KEY_ADDRESS="address";
-    private static final String KEY_PHONE_NUMBER="phone_number";
+    private static final String ID="id";
+    private static final String NAME="name";
+    private static final String ADDRESS="address";
+    private static final String PHONE_NUMBER="phone_number";
 
     //Constructor
 
-    public DBHandler(Context context){super(context,DATABASE_NAME,null,DATABASE_VERSION);}
+    public DBHandler(Context context)
+    {
+        super(context,DATABASE_NAME,null,DATABASE_VERSION);
+    }
 
     //Creating Tables
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String CREATE_PATIENT_DETAIL_TABLE="CREATE TABLE "+TABLE_PATIENT_DETAIL+"("
-                + KEY_ID+" INTEGER PRIMARY KEY,"
-                +KEY_NAME+" TEXT,"
-                +KEY_ADDRESS  +" TEXT,"
-                + KEY_PHONE_NUMBER + " TEXT " + ")" ;
+        String CREATE_PATIENT_DETAIL_TABLE="CREATE TABLE "+TABLE_NAME+"("
+                + ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +NAME+" TEXT,"
+                +ADDRESS  +" TEXT,"
+                +PHONE_NUMBER + " TEXT )" ;
 
         db.execSQL(CREATE_PATIENT_DETAIL_TABLE);
     }
@@ -48,9 +52,30 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Drop older tables if exist
 
-        db.execSQL("DROP TABLE IF EXIST "+TABLE_PATIENT_DETAIL);
+        db.execSQL("DROP TABLE IF EXIST "+TABLE_NAME);
 
         /// Create Table again
         onCreate(db);
+    }
+    public boolean insertData(String name,String address, String ph_no)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values= new ContentValues();
+        values.put(NAME,name);
+        values.put(ADDRESS,address);
+        values.put(PHONE_NUMBER,ph_no);
+        long result = db.insert(TABLE_NAME,null,values);
+        if(result == -1)
+            return  false;
+        else
+            return true;
+
+    }
+
+    public Cursor getalldata()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
+        return res;
     }
 }
