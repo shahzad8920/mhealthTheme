@@ -78,4 +78,28 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
         return res;
     }
+    public Cursor getdata(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.query(TABLE_NAME, null ,"id = ?", new String[]{ String.valueOf(id) },null,null,null);
+        return res;
+    }
+    public boolean updatedata(int id,String name,String address, String ph_no)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values= new ContentValues();
+        values.put(ID,id);
+        values.put(NAME,name);
+        values.put(ADDRESS,address);
+        values.put(PHONE_NUMBER,ph_no);
+        db.update(TABLE_NAME,values," id= ?",new String[] { String.valueOf(id) });
+        return true;
+    }
+
+    public int deletedata(int id)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        return db.delete(TABLE_NAME,"id=?",new String []{String.valueOf(id)});
+
+    }
 }
