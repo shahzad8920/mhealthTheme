@@ -27,6 +27,11 @@ public class deletePatient extends Fragment{
     AlertDialog dialog;
     int id;
     @Override
+    public void onResume() {
+        editid.setText(String.valueOf(MainActivity.p_id));
+        super.onResume();
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.delete_patient, container, false);

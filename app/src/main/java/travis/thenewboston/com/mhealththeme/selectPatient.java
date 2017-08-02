@@ -4,13 +4,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 
 public class selectPatient extends Fragment{
     DBHandler mydb=null;
+    AlertDialog dialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,12 +61,54 @@ public class selectPatient extends Fragment{
                     MainActivity.p_id=p.get_id();
                     //Toast.makeText(getActivity(), s+" "+String.valueOf(MainActivity.p_id), Toast.LENGTH_SHORT).show();
 
-                    ViewPager viewPager = (ViewPager) getActivity().findViewById(
-                            R.id.container);
-                    viewPager.setCurrentItem(2);
+
+
+                    try {
+                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                        final View mView = getActivity().getLayoutInflater().inflate(R.layout.action_alert, null);
+                        final Button edit_btn = (Button) mView.findViewById(R.id.edit_button);
+                        final Button delete_btn = (Button) mView.findViewById(R.id.delete_button);
+                        final Button diagnose_btn = (Button) mView.findViewById(R.id.diagnose_button);
+                        edit_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                                        R.id.container);
+                                viewPager.setCurrentItem(2);
+                            }
+                        });
+                        delete_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                                        R.id.container);
+                                viewPager.setCurrentItem(3);
+                            }
+                        });
+                        diagnose_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                ViewPager viewPager = (ViewPager) getActivity().findViewById(
+                                        R.id.container);
+                                viewPager.setCurrentItem(4);
+                            }
+                        });
+
+                        mBuilder.setView(mView);
+                        dialog = mBuilder.create();
+                        dialog.show();
+                    }
+                    catch (Exception e)
+                    {
+                        Toast.makeText(getActivity(),String.valueOf(e), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
+
         catch (Exception e)
         {
             //Toast.makeText(getActivity(), String.valueOf(e), Toast.LENGTH_SHORT).show();

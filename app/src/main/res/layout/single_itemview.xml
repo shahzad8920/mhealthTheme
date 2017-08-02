@@ -6,7 +6,9 @@
 
               android:layout_height="match_parent"
 
-              android:orientation="vertical" >
+              android:orientation="vertical"
+              android:background="@color/LightGrey"
+    >
 
     <LinearLayout
 
@@ -36,6 +38,8 @@
 
             android:textSize="30dp"
 
+            android:layout_marginLeft="20dp"
+
             android:textAppearance="?android:attr/textAppearanceMedium"
 
             android:textColor="#003366" />
@@ -51,6 +55,9 @@
         android:layout_height="wrap_content"
 
         android:textSize="16dp"
+
+
+        android:layout_marginLeft="15dp"
 
         android:textStyle="bold" />
 

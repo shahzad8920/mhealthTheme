@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Patient Info"
+        android:text="Delete Patient"
         android:textColor="@color/Black"
         android:textSize="30dp"/>
 

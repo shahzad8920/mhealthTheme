@@ -6,20 +6,19 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="travis.thenewboston.com.mhealththeme.MainActivity">
-
+                tools:context="travis.thenewboston.com.mhealththeme.MainActivity"
+   >
     <TextView
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
         android:text="Select Patient"
         android:textColor="@color/Black"
         android:textColorLink="@color/White"
         android:textSize="40sp"
-        tools:shadowColor="@color/DarkGray"/>
+        tools:shadowColor="@color/DarkGray"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/textView"
@@ -36,7 +35,6 @@
         android:layout_below="@+id/section_label"
         android:layout_marginTop="50dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        />
 
 </RelativeLayout>
