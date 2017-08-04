@@ -2,4 +2,9 @@
     <string name="app_name">mhealthTheme</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string-array name="sound_array">
+        <item>Select</item>
+        <item>Record Sound</item>
+        <item>Previous Recordings</item>
+    </string-array>
 </resources>

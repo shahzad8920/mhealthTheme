@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/mybutton"
-        android:text="Diagnose Patient"
+        android:text="Record Symptoms"
         android:textColor="@android:color/white"
         android:layout_below="@+id/delete_button"
         android:layout_alignParentLeft="true"
