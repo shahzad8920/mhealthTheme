@@ -46,7 +46,7 @@ public class diagnosePatient extends Fragment{
     AlertDialog dialog;
     //Media Player Variables
 
-    Button buttonStart, buttonStop, buttonPlayLastRecordAudio,
+    Button buttonSaveRecord, buttonStart, buttonStop, buttonPlayLastRecordAudio,
             buttonStopPlayingRecording ;
     String AudioSavePathInDevice = null;
     MediaRecorder mediaRecorder ;
@@ -55,6 +55,7 @@ public class diagnosePatient extends Fragment{
     String myRecording;
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer ;
+    boolean save_flag;
     @Override
     public void onResume() {
         try {
@@ -91,6 +92,8 @@ public class diagnosePatient extends Fragment{
         diagnose=(TextView) rootView.findViewById(R.id.p_diagnose_tv);
         btn_scoredata=(Button) rootView.findViewById(R.id.score_button);
 
+        save_flag=false;
+
         recordings(rootView);
         return rootView;
     }
@@ -121,7 +124,7 @@ public class diagnosePatient extends Fragment{
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
                     recordaudio();
                 }
-                else
+                else if(item.equals("Previous Recordings"))
                 {
 
                 }
@@ -143,6 +146,7 @@ public class diagnosePatient extends Fragment{
         buttonPlayLastRecordAudio = (Button) audiorecordView.findViewById(R.id.play_btn);
         buttonStopPlayingRecording = (Button) audiorecordView.findViewById(R.id.play_stop_btn);
         Button exit_btn=(Button) audiorecordView.findViewById(R.id.exit_btn);
+        buttonSaveRecord=(Button) audiorecordView.findViewById(R.id.save_button);
         buttonStop.setEnabled(false);
         buttonPlayLastRecordAudio.setEnabled(false);
         buttonStopPlayingRecording.setEnabled(false);
@@ -155,21 +159,39 @@ public class diagnosePatient extends Fragment{
             @Override
             public void onClick(View view)
             {
+                if(!save_flag && AudioSavePathInDevice!=null)
+                {
+                    new File(AudioSavePathInDevice).delete();
+                }
                 dialog.dismiss();
+
             }
         });
+        buttonSaveRecord.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View view)
+            {
+                save_flag=true;
+            }
+        });
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                if(!save_flag && AudioSavePathInDevice!=null)
+                {
+                    new File(AudioSavePathInDevice).delete();
+                }
+                save_flag=false;
                 if (checkPermission()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
                     String currentDateandTime = sdf.format(new Date());
                     myRecording = sdf.format(new Date());// + System.currentTimeMillis();
 
+                    myRecording=myRecording+p.get_name()+String.valueOf(p.get_id());
 
-                    AudioSavePathInDevice = getfilepath().toString() + "mhealthApp" +
+                    AudioSavePathInDevice = getfilepath().toString() +
                             myRecording + ".mp3";
 
 //                                        File video_file=new File(getfilepath().toString(),AudioSavePathInDevice);
@@ -191,7 +213,7 @@ public class diagnosePatient extends Fragment{
                     buttonStop.setEnabled(true);
                     buttonPlayLastRecordAudio.setEnabled(false);
 
-                    Toast.makeText(getActivity(), "Recording started at " + currentDateandTime,
+                    Toast.makeText(getActivity(), "Recording started at " + myRecording,
                             Toast.LENGTH_LONG).show();
                 } else {
                     requestPermission();
@@ -307,10 +329,10 @@ public class diagnosePatient extends Fragment{
     }
     public File getfilepath()
     {
-        File folder = new File("sdcard/Patient_app");
+        File folder = new File("sdcard/Patient_App");
         if(!folder.exists())
         {
-            folder.mkdir();
+            folder.mkdirs();
         }
 
         return folder;
