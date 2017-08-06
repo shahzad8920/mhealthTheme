@@ -1,5 +1,6 @@
 package travis.thenewboston.com.mhealththeme;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
@@ -15,14 +16,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,19 +47,23 @@ public class diagnosePatient extends Fragment{
     ViewPager viewPager;
     Spinner cuff_spinner,lungs_spinner;
     Patient p;
-    AlertDialog dialog;
+    AlertDialog dialog,dialog1;
     //Media Player Variables
 
-    Button buttonSaveRecord, buttonStart, buttonStop, buttonPlayLastRecordAudio,
+    Button buttonSaveRecord, buttonStart, buttonStop, buttonPlayLastRecordAudio,exit_btn,
             buttonStopPlayingRecording ;
     String AudioSavePathInDevice = null;
     MediaRecorder mediaRecorder ;
     Random random ;
+    View audiolistview;
     String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
     String myRecording;
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer ;
     boolean save_flag;
+
+    String spinner_text;
+
     @Override
     public void onResume() {
         try {
@@ -101,6 +109,7 @@ public class diagnosePatient extends Fragment{
     {
         cuff_spinner= (Spinner) rv.findViewById(R.id.cuff_spinner);
         lungs_spinner=(Spinner) rv.findViewById(R.id.lungs_spinner);
+
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.sound_array, android.R.layout.simple_spinner_item);
@@ -114,19 +123,24 @@ public class diagnosePatient extends Fragment{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                spinner_text="cuff";
                 String item=(String) parent.getItemAtPosition(position);
                 if(item.equals("Select"))
                 {
                     //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
                 }
-                else if(item.equals("Record Sound"))
+                else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
                 {
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
                     recordaudio();
                 }
-                else if(item.equals("Previous Recordings"))
+                else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
                 {
-
+                    filesview();
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -135,6 +149,146 @@ public class diagnosePatient extends Fragment{
 
             }
         });
+
+        lungs_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                spinner_text="lungs";
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
+                {
+                    Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
+                    recordaudio();
+                }
+                else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
+                {
+                    filesview();
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+    public void filesview()
+    {
+
+        try {
+
+            if(getallfiles().length>0) {
+                LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                audiolistview = inf.inflate(R.layout.recording_list, null);
+
+                ListView listView = (ListView) audiolistview.findViewById(R.id.all_recordings_list);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        R.layout.single_recording, R.id.recording_name, getallfiles());
+
+                listView.setAdapter(adapter);
+
+                AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+
+                listView.setOnItemClickListener(new OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+
+
+                        AudioSavePathInDevice=getfilepath().toString() +"/"+ a.getItemAtPosition(position);
+
+                        //Toast.makeText(getActivity(), AudioSavePathInDevice, Toast.LENGTH_LONG).show();
+
+                        mediaPlayer = new MediaPlayer();
+                        try {
+                            mediaPlayer.setDataSource(AudioSavePathInDevice);
+                            mediaPlayer.prepare();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        mediaPlayer.start();
+                        Toast.makeText(getActivity(), "Recording Playing",
+                                Toast.LENGTH_LONG).show();
+
+
+                    }
+                });
+
+                mBuilder1.setView(audiolistview);
+                dialog1 = mBuilder1.create();
+                dialog1.show();
+
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "No Record Found", Toast.LENGTH_LONG).show();
+            }
+
+/*
+            AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+            View audiolistview = getActivity().getLayoutInflater().inflate(R.layout.recording_list, null);
+
+            mBuilder1.setView(audiolistview);
+            dialog1=mBuilder1.create();
+            dialog1.show();
+            //Toast.makeText(getActivity(), String.valueOf(names.length), Toast.LENGTH_LONG).show();
+*/
+/*
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                    R.layout.single_recording, array_list);
+
+            AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+            View audiolistview = getActivity().getLayoutInflater().inflate(R.layout.recording_list, null);
+
+            //Populating List
+            final ListView listView = (ListView) audiolistview.findViewById(R.id.all_recordings_list);
+            listView.setAdapter(adapter);
+
+
+            listView.setOnItemClickListener(new OnItemClickListener() {
+                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+
+                    Toast.makeText(getActivity(), String.valueOf(position)+" item selected", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            mBuilder1.setView(audiolistview);
+            dialog1=mBuilder1.create();
+            dialog1.show();*/
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public String[] getallfiles()
+    {
+        File dir = new File(getfilepath().toString());
+
+        String[] names = dir.list(
+                new FilenameFilter() {
+                    public boolean accept(File dir, String name) {
+
+                        return name.endsWith(p.get_name() + String.valueOf(p.get_id())+ spinner_text + ".mp3");
+
+                        // Example
+                        // return name.endsWith(".mp3");
+                    }
+                });
+        return names;
     }
     public void recordaudio()
     {
@@ -145,7 +299,7 @@ public class diagnosePatient extends Fragment{
         buttonStop = (Button) audiorecordView.findViewById(R.id.record_stop_btn);
         buttonPlayLastRecordAudio = (Button) audiorecordView.findViewById(R.id.play_btn);
         buttonStopPlayingRecording = (Button) audiorecordView.findViewById(R.id.play_stop_btn);
-        Button exit_btn=(Button) audiorecordView.findViewById(R.id.exit_btn);
+        exit_btn=(Button) audiorecordView.findViewById(R.id.exit_btn);
         buttonSaveRecord=(Button) audiorecordView.findViewById(R.id.save_button);
         buttonStop.setEnabled(false);
         buttonPlayLastRecordAudio.setEnabled(false);
@@ -172,7 +326,9 @@ public class diagnosePatient extends Fragment{
             @Override
             public void onClick(View view)
             {
-                save_flag=true;
+                save_flag = true;
+                Toast.makeText(getActivity(), "Recording saved",
+                        Toast.LENGTH_LONG).show();
             }
         });
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -191,11 +347,15 @@ public class diagnosePatient extends Fragment{
 
                     myRecording=myRecording+p.get_name()+String.valueOf(p.get_id());
 
-                    AudioSavePathInDevice = getfilepath().toString() +
-                            myRecording + ".mp3";
+                    File path=new File(getfilepath(),myRecording + spinner_text + ".mp3");
+
+                    AudioSavePathInDevice = path.toString();
+                    //AudioSavePathInDevice = getfilepath().toString() +
+                     //       myRecording + ".mp3";
 
 //                                        File video_file=new File(getfilepath().toString(),AudioSavePathInDevice);
-
+                    Toast.makeText(getActivity(), getfilepath().toString() ,
+                            Toast.LENGTH_LONG).show();
                     MediaRecorderReady();
 
                     try {
@@ -213,7 +373,7 @@ public class diagnosePatient extends Fragment{
                     buttonStop.setEnabled(true);
                     buttonPlayLastRecordAudio.setEnabled(false);
 
-                    Toast.makeText(getActivity(), "Recording started at " + myRecording,
+                    Toast.makeText(getActivity(), "Recording started ",
                             Toast.LENGTH_LONG).show();
                 } else {
                     requestPermission();
