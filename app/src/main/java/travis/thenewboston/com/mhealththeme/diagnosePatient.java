@@ -80,6 +80,8 @@ public class diagnosePatient extends Fragment{
             {
                 name.setText(p.get_name());
                 diagnose.setText("Sample Diagnose");
+                cuff_spinner.setSelection(0);
+                lungs_spinner.setSelection(0);
             }
         }
         catch (Exception e)

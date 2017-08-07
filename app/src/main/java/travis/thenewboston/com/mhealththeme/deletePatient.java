@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 /**
  * Created by Shahzad Adil on 6/21/2017.
  */
@@ -42,6 +45,35 @@ public class deletePatient extends Fragment{
         deletedata();
         return rootView;
     }
+
+    public String[] getallfiles(final String s)
+    {
+        File dir = new File(getfilepath().toString());
+
+        String[] names = dir.list(
+                new FilenameFilter() {
+                    public boolean accept(File dir, String name) {
+
+                        return name.endsWith(p.get_name() + String.valueOf(p.get_id())+ s + ".mp3");
+
+                        // Example
+                        // return name.endsWith(".mp3");
+                    }
+                });
+        return names;
+    }
+
+    public File getfilepath()
+    {
+        File folder = new File("sdcard/Patient_App");
+        if(!folder.exists())
+        {
+            folder.mkdirs();
+        }
+
+        return folder;
+    }
+
     public void deletedata()
     {
         try {
@@ -93,6 +125,21 @@ public class deletePatient extends Fragment{
                                     MainActivity.p_id = 0;
                                     ViewPager viewPager = (ViewPager) getActivity().findViewById(
                                             R.id.container);
+                                    String[]s1=getallfiles("lungs");
+                                    String[]s2=getallfiles("cuff");
+
+                                    if(s1.length>0) {
+                                        for (int i = 0; i < s1.length; i++) {
+                                            new File(s1[i]).delete();
+                                        }
+                                    }
+                                    if(s2.length>0)
+                                    {
+                                        for(int i=0;i<s2.length;i++)
+                                        {
+                                            new File(s2[i]).delete();
+                                        }
+                                    }
                                     viewPager.setCurrentItem(0);
                                 } else {
                                     Toast.makeText(getActivity(), "ID:" + editid.getText().toString() + " data does not deleted", Toast.LENGTH_SHORT).show();
