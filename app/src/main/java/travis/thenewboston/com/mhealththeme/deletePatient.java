@@ -130,14 +130,14 @@ public class deletePatient extends Fragment{
 
                                     if(s1.length>0) {
                                         for (int i = 0; i < s1.length; i++) {
-                                            new File(s1[i]).delete();
+                                            new File(getfilepath().toString() +"/"+s1[i]).delete();
                                         }
                                     }
                                     if(s2.length>0)
                                     {
                                         for(int i=0;i<s2.length;i++)
                                         {
-                                            new File(s2[i]).delete();
+                                            new File(getfilepath().toString() +"/"+s2[i]).delete();
                                         }
                                     }
                                     viewPager.setCurrentItem(0);

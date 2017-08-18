@@ -20,7 +20,18 @@
         android:layout_toEndOf="@+id/textView10"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp">
-
+        <Spinner
+            android:id="@+id/concious_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +52,18 @@
         android:id="@+id/relativeLayout7"
         android:layout_alignLeft="@+id/relativeLayout8"
         android:layout_alignStart="@+id/relativeLayout8">
-
+        <Spinner
+            android:id="@+id/o2_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +84,18 @@
         android:layout_alignLeft="@+id/relativeLayout5"
         android:layout_alignStart="@+id/relativeLayout5"
         android:id="@+id/relativeLayout6">
-
+        <Spinner
+            android:id="@+id/resp_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,6 +116,18 @@
         android:layout_alignLeft="@+id/relativeLayout2"
         android:layout_alignStart="@+id/relativeLayout2"
         android:id="@+id/relativeLayout5">
+        <Spinner
+            android:id="@+id/bp_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -104,6 +149,18 @@
         android:background="@drawable/background"
         android:orientation="horizontal"
         android:id="@+id/relativeLayout4">
+        <Spinner
+            android:id="@+id/temp_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -159,7 +216,18 @@
         android:layout_alignLeft="@+id/relativeLayout"
         android:layout_alignStart="@+id/relativeLayout"
         android:id="@+id/relativeLayout2">
-
+        <Spinner
+            android:id="@+id/pulse_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -198,7 +266,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/mybutton"
-        android:text="Score"
+        android:text="Record"
         android:layout_marginTop="32dp"
         android:layout_below="@+id/relativeLayout8"
         android:layout_centerHorizontal="true"/>
@@ -355,7 +423,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:text="Consiousness Level"
+        android:text="Conciousness Level"
         android:textColor="@color/Black"
         android:layout_below="@+id/relativeLayout7"
         android:layout_alignLeft="@+id/textView9"

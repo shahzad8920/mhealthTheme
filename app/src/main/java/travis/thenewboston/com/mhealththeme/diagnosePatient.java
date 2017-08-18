@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,9 +46,11 @@ public class diagnosePatient extends Fragment{
     Button btn_scoredata;
     Cursor cursor;
     ViewPager viewPager;
-    Spinner cuff_spinner,lungs_spinner;
+    Spinner cuff_spinner,lungs_spinner,temp_spinner,pulse_spinner,bp_spinner,resp_spinner,o2_spinner,concious_spinner;
     Patient p;
+
     AlertDialog dialog,dialog1;
+
     //Media Player Variables
 
     Button buttonSaveRecord, buttonStart, buttonStop, buttonPlayLastRecordAudio,exit_btn,
@@ -61,7 +64,10 @@ public class diagnosePatient extends Fragment{
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer ;
     boolean save_flag;
+    String tempval=null;
 
+    String[] array,array1;
+    ArrayAdapter<String> adapter,adapter1;
     String spinner_text;
 
     @Override
@@ -82,6 +88,16 @@ public class diagnosePatient extends Fragment{
                 diagnose.setText("Sample Diagnose");
                 cuff_spinner.setSelection(0);
                 lungs_spinner.setSelection(0);
+                array1=new String[]{"Select","Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                temp_spinner.setAdapter(adapter1);
+                pulse_spinner.setAdapter(adapter1);
+                bp_spinner.setAdapter(adapter1);
+                resp_spinner.setAdapter(adapter1);
+                o2_spinner.setAdapter(adapter1);
+                concious_spinner.setAdapter(adapter1);
             }
         }
         catch (Exception e)
@@ -111,15 +127,33 @@ public class diagnosePatient extends Fragment{
     {
         cuff_spinner= (Spinner) rv.findViewById(R.id.cuff_spinner);
         lungs_spinner=(Spinner) rv.findViewById(R.id.lungs_spinner);
+        temp_spinner=(Spinner) rv.findViewById(R.id.temp_spinner);
+        pulse_spinner=(Spinner) rv.findViewById(R.id.pulse_spinner);
+        bp_spinner=(Spinner) rv.findViewById(R.id.bp_spinner);
+        o2_spinner=(Spinner) rv.findViewById(R.id.o2_spinner);
+        resp_spinner=(Spinner) rv.findViewById(R.id.resp_spinner);
+        concious_spinner=(Spinner) rv.findViewById(R.id.concious_spinner);
 
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.sound_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        array=new String[]{"Select","Record Sound","Previous Recordings"};
+        array1=new String[]{"Select","Manual input Values","Use External Sensors","Use Internal Sensors"};
+
+        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array);
+        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+
+        adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+        // Specify the layout to use when the list of choices appears
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
         cuff_spinner.setAdapter(adapter);
         lungs_spinner.setAdapter(adapter);
+        temp_spinner.setAdapter(adapter1);
+        pulse_spinner.setAdapter(adapter1);
+        bp_spinner.setAdapter(adapter1);
+        resp_spinner.setAdapter(adapter1);
+        o2_spinner.setAdapter(adapter1);
+        concious_spinner.setAdapter(adapter1);
 
         cuff_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -182,7 +216,417 @@ public class diagnosePatient extends Fragment{
 
             }
         });
+        temp_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+            String item=(String) parent.getItemAtPosition(position);
+            if(item.equals("Select"))
+            {
+                //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+            }
+            else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+            {
+                recordtemp();
+            }
+            else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+            {
+
+            }
+            else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+            {
+
+            }
+            else if(MainActivity.p_id==0)
+            {
+                Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    });
+        pulse_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+                {
+                    recordpulse();
+                }
+                else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        bp_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+                {
+                    recordbp();
+                }
+                else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        resp_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+                {
+                    respiration();
+                }
+                else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        o2_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+                {
+                    recordo2();
+                }
+                else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        concious_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item=(String) parent.getItemAtPosition(position);
+                if(item.equals("Select"))
+                {
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
+                }
+                else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
+                {
+                    recordconcious();
+
+                }
+                else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
+                {
+
+                }
+                else if(MainActivity.p_id==0)
+                {
+                    Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+    public void recordconcious()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View conciousview = inf.inflate(R.layout.record_conciousness, null);
+
+        Button concious_btn=(Button) conciousview.findViewById(R.id.concious_ok_button);
+        array1=new String[]{"Alert","Confused","Lethargic"};
+        adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+        // Specify the layout to use when the list of choices appears
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final Spinner concious_level_spinner= (Spinner) conciousview.findViewById(R.id.conciuosness_level_spinner_id);
+
+        concious_level_spinner.setAdapter(adapter1);
+
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        concious_level_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                tempval=(String) parent.getItemAtPosition(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        concious_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                concious_spinner.setAdapter(adapter1);
+                concious_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(conciousview);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
+    }
+    public void recordo2()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View o2view = inf.inflate(R.layout.record_o2_saturation, null);
+
+        final EditText o2_start_editText=(EditText) o2view.findViewById(R.id.o2_start_id);
+
+        final EditText o2_end_editText=(EditText) o2view.findViewById(R.id.o2_end_id);
+
+        Button o2_btn=(Button) o2view.findViewById(R.id.o2_ok_button);
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        o2_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+                tempval=o2_start_editText.getText().toString()+" up to "+o2_end_editText.getText().toString();
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                o2_spinner.setAdapter(adapter1);
+                o2_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(o2view);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
+    }
+    public void recordtemp()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View tempview = inf.inflate(R.layout.record_temp, null);
+
+        final EditText temp_editText=(EditText) tempview.findViewById(R.id.temp_id);
+
+        Button temp_btn=(Button) tempview.findViewById(R.id.temp_ok_button);
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        temp_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+                tempval=temp_editText.getText().toString();
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                temp_spinner.setAdapter(adapter1);
+                temp_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(tempview);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
+    }
+    public void recordpulse()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View tempview = inf.inflate(R.layout.record_pulse, null);
+
+        final EditText pulse_editText=(EditText) tempview.findViewById(R.id.pulse_id);
+
+        Button pulse_btn=(Button) tempview.findViewById(R.id.pulse_ok_button);
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        pulse_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+                tempval=pulse_editText.getText().toString();
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                pulse_spinner.setAdapter(adapter1);
+                pulse_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(tempview);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
+    }
+    public void recordbp()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View tempview = inf.inflate(R.layout.record_bp, null);
+
+        final EditText sysbp_editText=(EditText) tempview.findViewById(R.id.systolic_bp_id);
+
+        final EditText diastolicbp_editText=(EditText) tempview.findViewById(R.id.diastolic_bp_id);
+
+        Button bp_btn=(Button) tempview.findViewById(R.id.bp_ok_button);
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        bp_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+                tempval=sysbp_editText.getText().toString()+"/"+diastolicbp_editText.getText().toString();
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                bp_spinner.setAdapter(adapter1);
+                bp_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(tempview);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
+    }
+    public void respiration()
+    {
+        LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View tempview = inf.inflate(R.layout.record_respiration, null);
+
+        final EditText resp_start_editText=(EditText) tempview.findViewById(R.id.resp_start_id);
+
+        final EditText resp_end_editText=(EditText) tempview.findViewById(R.id.resp_end_id);
+
+        Button resp_btn=(Button) tempview.findViewById(R.id.resp_ok_button);
+
+        AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
+
+        resp_btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view)
+            {
+                tempval=resp_start_editText.getText().toString()+" up to "+resp_end_editText.getText().toString();
+
+                array1=new String[]{tempval,"Manual input Values","Use External Sensors","Use Internal Sensors"};
+                adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
+                // Specify the layout to use when the list of choices appears
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                resp_spinner.setAdapter(adapter1);
+                resp_spinner.setSelection(0);
+                dialog1.dismiss();
+            }
+        });
+        mBuilder1.setView(tempview);
+        dialog1 = mBuilder1.create();
+        dialog1.show();
     }
     public void filesview()
     {
@@ -356,8 +800,8 @@ public class diagnosePatient extends Fragment{
                      //       myRecording + ".mp3";
 
 //                                        File video_file=new File(getfilepath().toString(),AudioSavePathInDevice);
-                    Toast.makeText(getActivity(), getfilepath().toString() ,
-                            Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), getfilepath().toString() ,
+                      //      Toast.LENGTH_LONG).show();
                     MediaRecorderReady();
 
                     try {

@@ -7,4 +7,15 @@
         <item>Record Sound</item>
         <item>Previous Recordings</item>
     </string-array>
+    <string-array name="concious_array">
+        <item>Alert</item>
+        <item>Confused</item>
+        <item>Lethargic</item>
+    </string-array>
+    <string-array name="menu_array">
+        <item>Select</item>
+        <item>Manual input Values</item>
+        <item>Use External Sensors</item>
+        <item>Use Internal Sensors</item>
+    </string-array>
 </resources>
