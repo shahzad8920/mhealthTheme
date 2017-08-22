@@ -681,38 +681,6 @@ public class diagnosePatient extends Fragment{
             {
                 Toast.makeText(getActivity(), "No Record Found", Toast.LENGTH_LONG).show();
             }
-
-/*
-            AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
-            View audiolistview = getActivity().getLayoutInflater().inflate(R.layout.recording_list, null);
-
-            mBuilder1.setView(audiolistview);
-            dialog1=mBuilder1.create();
-            dialog1.show();
-            //Toast.makeText(getActivity(), String.valueOf(names.length), Toast.LENGTH_LONG).show();
-*/
-/*
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                    R.layout.single_recording, array_list);
-
-            AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
-            View audiolistview = getActivity().getLayoutInflater().inflate(R.layout.recording_list, null);
-
-            //Populating List
-            final ListView listView = (ListView) audiolistview.findViewById(R.id.all_recordings_list);
-            listView.setAdapter(adapter);
-
-
-            listView.setOnItemClickListener(new OnItemClickListener() {
-                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-
-                    Toast.makeText(getActivity(), String.valueOf(position)+" item selected", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            mBuilder1.setView(audiolistview);
-            dialog1=mBuilder1.create();
-            dialog1.show();*/
         }
         catch (Exception e)
         {
@@ -729,15 +697,13 @@ public class diagnosePatient extends Fragment{
                     public boolean accept(File dir, String name) {
 
                         return name.endsWith(p.get_name() + String.valueOf(p.get_id())+ spinner_text + ".mp3");
-
-                        // Example
-                        // return name.endsWith(".mp3");
                     }
                 });
         return names;
     }
     public void recordaudio()
     {
+        save_flag = false;
         AlertDialog.Builder mBuilder1 = new AlertDialog.Builder(getActivity());
         final View audiorecordView = getActivity().getLayoutInflater().inflate(R.layout.audiorecord, null);
 
@@ -750,7 +716,7 @@ public class diagnosePatient extends Fragment{
         buttonStop.setEnabled(false);
         buttonPlayLastRecordAudio.setEnabled(false);
         buttonStopPlayingRecording.setEnabled(false);
-
+        buttonSaveRecord.setEnabled(false);
         random = new Random();
 
 
@@ -772,20 +738,26 @@ public class diagnosePatient extends Fragment{
             @Override
             public void onClick(View view)
             {
+
                 save_flag = true;
                 Toast.makeText(getActivity(), "Recording saved",
                         Toast.LENGTH_LONG).show();
+                buttonSaveRecord.setEnabled(false);
+
+
             }
         });
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(save_flag)
+                {
+                    save_flag=false;
+                }
                 if(!save_flag && AudioSavePathInDevice!=null)
                 {
                     new File(AudioSavePathInDevice).delete();
                 }
-                save_flag=false;
                 if (checkPermission()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
                     String currentDateandTime = sdf.format(new Date());
@@ -814,7 +786,7 @@ public class diagnosePatient extends Fragment{
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
+                    buttonSaveRecord.setEnabled(false);
                     buttonStart.setEnabled(false);
                     buttonStop.setEnabled(true);
                     buttonPlayLastRecordAudio.setEnabled(false);
@@ -833,6 +805,7 @@ public class diagnosePatient extends Fragment{
                 buttonStop.setEnabled(false);
                 buttonPlayLastRecordAudio.setEnabled(true);
                 buttonStart.setEnabled(true);
+                buttonSaveRecord.setEnabled(true);
                 buttonStopPlayingRecording.setEnabled(false);
 
                 Toast.makeText(getActivity(), "Recording Completed",
