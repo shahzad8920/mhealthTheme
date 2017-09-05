@@ -20,7 +20,6 @@ public class editPatient extends Fragment{
     EditText editname,editaddress,editph_no,editid;
     Button btn_updatedata;
     Cursor cursor;
-    ViewPager viewPager;
     Patient p;
     @Override
     public void onResume() {
@@ -71,25 +70,31 @@ public class editPatient extends Fragment{
                 @Override
                 public void onClick(View v) {
 
-                    boolean isupdate=mydb.updatedata(Integer.parseInt(editid.getText().toString()),
-                            editname.getText().toString(),
-                            editaddress.getText().toString(),
-                            editph_no.getText().toString());
-                    if(isupdate)
-                    {
-                        Toast.makeText(getActivity(),"ID:"+editid.getText().toString()+" data is updated" , Toast.LENGTH_SHORT).show();
-                        editid.getText().clear();
-                        editname.getText().clear();
-                        editph_no.getText().clear();
-                        editaddress.getText().clear();
-                        MainActivity.p_id=0;
-                        viewPager = (ViewPager) getActivity().findViewById(
-                                R.id.container);
-                        viewPager.setCurrentItem(0);
+                    if(MainActivity.p_id!=0) {
+
+                        boolean isupdate = mydb.updatedata(Integer.parseInt(editid.getText().toString()),
+                                editname.getText().toString(),
+                                editaddress.getText().toString(),
+                                editph_no.getText().toString());
+                        if (isupdate) {
+                            Toast.makeText(getActivity(), "ID:" + editid.getText().toString() + " data is updated", Toast.LENGTH_SHORT).show();
+                            editid.getText().clear();
+                            editname.getText().clear();
+                            editph_no.getText().clear();
+                            editaddress.getText().clear();
+                            MainActivity.p_id = 0;
+
+                            ViewPager viewPager;
+                            viewPager = (ViewPager) getActivity().findViewById(
+                                    R.id.container);
+                            viewPager.setCurrentItem(0);
+                        } else {
+                            Toast.makeText(getActivity(), "ID:" + editid.getText().toString() + " data does not updated", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else
                     {
-                        Toast.makeText(getActivity(),"ID:"+editid.getText().toString()+" data does not updated" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

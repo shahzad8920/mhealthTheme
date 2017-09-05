@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingBottom="0dp"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
@@ -121,8 +121,8 @@
         android:background="@drawable/mybutton"
         android:text="Update"
         android:textColor="@android:color/white"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/edit_number"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"/>
+        android:layout_marginTop="28dp"/>
     
 </RelativeLayout>

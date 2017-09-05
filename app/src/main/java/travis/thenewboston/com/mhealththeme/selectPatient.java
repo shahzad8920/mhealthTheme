@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,19 +23,22 @@ import java.util.ArrayList;
 public class selectPatient extends Fragment{
     DBHandler mydb=null;
     AlertDialog dialog;
+    Cursor cursor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.select_patient, container, false);
         mydb = new DBHandler(getActivity());
+        MainActivity.listView = (ListView) rootView.findViewById(R.id.patient_list);
         getalldata(rootView);
         return rootView;
     }
     public void getalldata(View rv)
     {
         try {
-            Cursor cursor = mydb.getalldata();
 
+            cursor = mydb.getalldata();
             ArrayList<Patient> array = new ArrayList<Patient>();
             if (cursor.moveToFirst()) {
                 do {
@@ -48,15 +50,12 @@ public class selectPatient extends Fragment{
                     array.add(p);
                 } while (cursor.moveToNext());
             }
-            ArrayAdapter adapter = new ArrayAdapter<Patient>(getActivity(),
-                    R.layout.single_itemview, array);
-            final ListView listView = (ListView) rv.findViewById(R.id.patient_list);
-            listView.setAdapter(new CustomAdapter(array,getActivity()));
-
-            listView.setOnItemClickListener(new OnItemClickListener() {
+            CustomAdapter adapter=new CustomAdapter(array,getActivity());
+            MainActivity.listView.setAdapter(adapter);
+            MainActivity.listView.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 
-                    Patient p=(Patient)listView.getItemAtPosition(position);
+                    Patient p=(Patient)MainActivity.listView.getItemAtPosition(position);
                     String s=p.get_name();
                     MainActivity.p_id=p.get_id();
                     //Toast.makeText(getActivity(), s+" "+String.valueOf(MainActivity.p_id), Toast.LENGTH_SHORT).show();

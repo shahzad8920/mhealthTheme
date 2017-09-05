@@ -168,6 +168,7 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
                 {
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
+                    AudioSavePathInDevice=null;
                     recordaudio();
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
@@ -199,6 +200,7 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
                 {
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
+                    AudioSavePathInDevice=null;
                     recordaudio();
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
@@ -750,13 +752,14 @@ public class diagnosePatient extends Fragment{
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(save_flag)
-                {
-                    save_flag=false;
-                }
+
                 if(!save_flag && AudioSavePathInDevice!=null)
                 {
                     new File(AudioSavePathInDevice).delete();
+                }
+                if(save_flag)
+                {
+                    save_flag=false;
                 }
                 if (checkPermission()) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
