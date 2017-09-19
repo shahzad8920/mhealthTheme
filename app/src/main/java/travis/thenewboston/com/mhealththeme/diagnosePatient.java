@@ -173,6 +173,7 @@ public class diagnosePatient extends Fragment{
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
                 {
+                    mediaPlayer = new MediaPlayer();
                     filesview();
                 }
                 else if(MainActivity.p_id==0)
@@ -205,6 +206,7 @@ public class diagnosePatient extends Fragment{
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
                 {
+                    mediaPlayer = new MediaPlayer();
                     filesview();
                 }
                 else if(MainActivity.p_id==0)
@@ -658,7 +660,10 @@ public class diagnosePatient extends Fragment{
 
                         //Toast.makeText(getActivity(), AudioSavePathInDevice, Toast.LENGTH_LONG).show();
 
-                        mediaPlayer = new MediaPlayer();
+
+                        mediaPlayer.reset();
+
+
                         try {
                             mediaPlayer.setDataSource(AudioSavePathInDevice);
                             mediaPlayer.prepare();
@@ -698,7 +703,7 @@ public class diagnosePatient extends Fragment{
                 new FilenameFilter() {
                     public boolean accept(File dir, String name) {
 
-                        return name.endsWith(p.get_name() + String.valueOf(p.get_id())+ spinner_text + ".mp3");
+                        return name.endsWith(p.get_name() + String.valueOf(p.get_id())+ spinner_text + ".wav");
                     }
                 });
         return names;
@@ -768,11 +773,11 @@ public class diagnosePatient extends Fragment{
 
                     myRecording=myRecording+p.get_name()+String.valueOf(p.get_id());
 
-                    File path=new File(getfilepath(),myRecording + spinner_text + ".mp3");
+                    File path=new File(getfilepath(),myRecording + spinner_text + ".wav");
 
                     AudioSavePathInDevice = path.toString();
                     //AudioSavePathInDevice = getfilepath().toString() +
-                     //       myRecording + ".mp3";
+                     //       myRecording + ".wav";
 
 //                                        File video_file=new File(getfilepath().toString(),AudioSavePathInDevice);
                     //Toast.makeText(getActivity(), getfilepath().toString() ,
@@ -866,6 +871,7 @@ public class diagnosePatient extends Fragment{
         mBuilder1.setView(audiorecordView);
         dialog=mBuilder1.create();
         dialog.show();
+        dialog.setCancelable(false);
     }
 
     public void MediaRecorderReady(){
