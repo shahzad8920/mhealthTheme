@@ -15,17 +15,19 @@
         android:text="Patient Recordings"
         android:textColor="@color/Black"
         android:textColorLink="@color/White"
-        android:textSize="35sp"
+        android:textSize="30sp"
         tools:shadowColor="@color/DarkGray"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
     <ListView
+        android:scrollbars="none"
         android:id="@+id/all_recordings_list"
         android:layout_width="match_parent"
         android:layout_below="@+id/section_label"
         android:layout_marginTop="10dp"
         android:layout_height="match_parent"
+        android:dividerHeight="10dp"
         />
 
 </RelativeLayout>

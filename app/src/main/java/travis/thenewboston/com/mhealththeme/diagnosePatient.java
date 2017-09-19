@@ -46,7 +46,7 @@ public class diagnosePatient extends Fragment{
     Button btn_scoredata;
     Cursor cursor;
     ViewPager viewPager;
-    Spinner cuff_spinner,lungs_spinner,temp_spinner,pulse_spinner,bp_spinner,resp_spinner,o2_spinner,concious_spinner;
+    Spinner cough_spinner,lungs_spinner,temp_spinner,pulse_spinner,bp_spinner,resp_spinner,o2_spinner,concious_spinner;
     Patient p;
 
     AlertDialog dialog,dialog1;
@@ -86,7 +86,7 @@ public class diagnosePatient extends Fragment{
             {
                 name.setText(p.get_name());
                 diagnose.setText("Sample Diagnose");
-                cuff_spinner.setSelection(0);
+                cough_spinner.setSelection(0);
                 lungs_spinner.setSelection(0);
                 array1=new String[]{"Select","Manual input Values","Use External Sensors","Use Internal Sensors"};
                 adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,array1);
@@ -125,7 +125,7 @@ public class diagnosePatient extends Fragment{
     }
     public void recordings(View rv)
     {
-        cuff_spinner= (Spinner) rv.findViewById(R.id.cuff_spinner);
+        cough_spinner= (Spinner) rv.findViewById(R.id.cough_spinner);
         lungs_spinner=(Spinner) rv.findViewById(R.id.lungs_spinner);
         temp_spinner=(Spinner) rv.findViewById(R.id.temp_spinner);
         pulse_spinner=(Spinner) rv.findViewById(R.id.pulse_spinner);
@@ -146,7 +146,7 @@ public class diagnosePatient extends Fragment{
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
-        cuff_spinner.setAdapter(adapter);
+        cough_spinner.setAdapter(adapter);
         lungs_spinner.setAdapter(adapter);
         temp_spinner.setAdapter(adapter1);
         pulse_spinner.setAdapter(adapter1);
@@ -155,11 +155,11 @@ public class diagnosePatient extends Fragment{
         o2_spinner.setAdapter(adapter1);
         concious_spinner.setAdapter(adapter1);
 
-        cuff_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        cough_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                spinner_text="cuff";
+                spinner_text="cough";
                 String item=(String) parent.getItemAtPosition(position);
                 if(item.equals("Select"))
                 {

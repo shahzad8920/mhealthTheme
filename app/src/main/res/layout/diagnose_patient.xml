@@ -184,7 +184,7 @@
         android:layout_alignLeft="@+id/relativeLayout7"
         android:layout_alignStart="@+id/relativeLayout7">
         <Spinner
-            android:id="@+id/cuff_spinner"
+            android:id="@+id/cough_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

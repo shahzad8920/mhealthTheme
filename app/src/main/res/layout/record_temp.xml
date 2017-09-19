@@ -38,7 +38,7 @@
         android:ems="10"
         android:textSize="15dp"
         android:hint="Enter Patient Temperature"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:layout_alignBaseline="@+id/textView2"
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignLeft="@+id/temp_ok_button"

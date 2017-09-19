@@ -35,6 +35,8 @@
         android:layout_below="@+id/section_label"
         android:layout_marginTop="50dp"
         android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:dividerHeight="10dp"
         />
 
 </RelativeLayout>

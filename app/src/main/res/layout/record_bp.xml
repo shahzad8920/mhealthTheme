@@ -18,7 +18,7 @@
         android:layout_alignStart="@+id/bp_ok_button"
         android:ems="10"
         android:hint="Enter Systolic Value"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:textSize="15dp"/>
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter Diastolic Value"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:layout_alignBaseline="@+id/textView12"
         android:layout_alignBottom="@+id/textView12"
         android:layout_alignLeft="@+id/systolic_bp_id"
