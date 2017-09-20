@@ -37,6 +37,9 @@
         android:layout_height="match_parent"
         android:scrollbars="none"
         android:dividerHeight="10dp"
+
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/white"
         />
 
 </RelativeLayout>

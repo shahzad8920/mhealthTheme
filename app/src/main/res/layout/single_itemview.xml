@@ -28,6 +28,8 @@
 
         <TextView
 
+            android:background="?android:attr/activatedBackgroundIndicator"
+
             android:id="@+id/patient_name"
 
             android:layout_width="fill_parent"
@@ -47,6 +49,8 @@
     </LinearLayout>
 
     <TextView
+
+        android:background="?android:attr/activatedBackgroundIndicator"
 
         android:id="@+id/patient_id"
 
