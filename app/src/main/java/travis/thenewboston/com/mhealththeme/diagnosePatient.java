@@ -1,5 +1,6 @@
 package travis.thenewboston.com.mhealththeme;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -7,11 +8,14 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.util.AndroidRuntimeException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +32,12 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOError;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -42,6 +51,12 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class diagnosePatient extends Fragment{
     DBHandler mydb=null;
+    String un;
+    Connection con;
+    String password;
+    EditText editipaddress;
+    String db;
+    String ip;
     TextView name,diagnose;
     Button btn_scoredata;
     Cursor cursor;
@@ -69,6 +84,34 @@ public class diagnosePatient extends Fragment{
     String[] array,array1;
     ArrayAdapter<String> adapter,adapter1;
     String spinner_text;
+
+    @SuppressLint("NewApi")
+    private Connection ConnectionHelper(String user, String password,
+                                        String database, String server) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection connection = null;
+        String ConnectionURL = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            ConnectionURL = "jdbc:jtds:sqlserver://" + server + ";"
+                    + "databaseName=" + database + ";user=" + user
+                    + ";password=" + password + ";";
+            connection = DriverManager.getConnection(ConnectionURL);
+            Toast.makeText(getActivity(),connection.toString(),Toast.LENGTH_SHORT).show();
+        } catch (SQLException se) {
+            Log.e("ERRO", se.getMessage());
+            Toast.makeText(getActivity(),se.toString(),Toast.LENGTH_SHORT).show();
+        } catch (ClassNotFoundException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+        return connection;
+    }
 
     @Override
     public void onResume() {
@@ -116,9 +159,14 @@ public class diagnosePatient extends Fragment{
         cursor = mydb.getdata(MainActivity.p_id);
         name=(TextView) rootView.findViewById(R.id.p_name_tv);
         diagnose=(TextView) rootView.findViewById(R.id.p_diagnose_tv);
+        editipaddress=(EditText)rootView.findViewById(R.id.server_ip);
         btn_scoredata=(Button) rootView.findViewById(R.id.score_button);
 
         save_flag=false;
+
+        un = "sa";
+        password = "6567170pP_";
+        db = "Patient_DB";
 
         recordings(rootView);
         return rootView;
@@ -163,22 +211,24 @@ public class diagnosePatient extends Fragment{
                 String item=(String) parent.getItemAtPosition(position);
                 if(item.equals("Select"))
                 {
-                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
                 }
                 else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
                 {
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
                     AudioSavePathInDevice=null;
                     recordaudio();
+                    cough_spinner.setSelection(0);
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
                 {
                     mediaPlayer = new MediaPlayer();
                     filesview();
+                    cough_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                    cough_spinner.setSelection(0);
                 }
             }
 
@@ -196,22 +246,26 @@ public class diagnosePatient extends Fragment{
                 String item=(String) parent.getItemAtPosition(position);
                 if(item.equals("Select"))
                 {
-                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
                 }
+
                 else if(item.equals("Record Sound")&& MainActivity.p_id!=0)
                 {
                     Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
                     AudioSavePathInDevice=null;
                     recordaudio();
+                    lungs_spinner.setSelection(0);
                 }
                 else if(item.equals("Previous Recordings") && MainActivity.p_id!=0)
                 {
                     mediaPlayer = new MediaPlayer();
                     filesview();
+                    lungs_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
+                    lungs_spinner.setSelection(0);
+                    //Toast.makeText(getActivity(), "Kindly Select an option first", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -232,19 +286,22 @@ public class diagnosePatient extends Fragment{
             else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
             {
                 recordtemp();
+                temp_spinner.setSelection(0);
             }
             else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
             {
-
+                temp_spinner.setSelection(0);
             }
             else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
             {
-
+                temp_spinner.setSelection(0);
             }
             else if(MainActivity.p_id==0)
             {
+                temp_spinner.setSelection(0);
                 Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
             }
+
         }
 
         @Override
@@ -264,17 +321,19 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
                 {
                     recordpulse();
+                    pulse_spinner.setSelection(0);
                 }
                 else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
                 {
-
+                    pulse_spinner.setSelection(0);
                 }
                 else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
                 {
-
+                    pulse_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
+                    pulse_spinner.setSelection(0);
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
@@ -296,17 +355,19 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
                 {
                     recordbp();
+                    bp_spinner.setSelection(0);
                 }
                 else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
                 {
-
+                    bp_spinner.setSelection(0);
                 }
                 else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
                 {
-
+                    bp_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
+                    bp_spinner.setSelection(0);
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
@@ -328,17 +389,19 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
                 {
                     respiration();
+                    resp_spinner.setSelection(0);
                 }
                 else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
                 {
-
+                    resp_spinner.setSelection(0);
                 }
                 else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
                 {
-
+                    resp_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
+                    resp_spinner.setSelection(0);
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
@@ -360,17 +423,19 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
                 {
                     recordo2();
+                    o2_spinner.setSelection(0);
                 }
                 else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
                 {
-
+                    o2_spinner.setSelection(0);
                 }
                 else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
                 {
-
+                    o2_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
+                    o2_spinner.setSelection(0);
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
@@ -392,18 +457,19 @@ public class diagnosePatient extends Fragment{
                 else if(item.equals("Manual input Values")&& MainActivity.p_id!=0)
                 {
                     recordconcious();
-
+                    concious_spinner.setSelection(0);
                 }
                 else if(item.equals("Use External Sensors") && MainActivity.p_id!=0)
                 {
-
+                    concious_spinner.setSelection(0);
                 }
                 else if(item.equals("Use Internal Sensors") && MainActivity.p_id!=0)
                 {
-
+                    concious_spinner.setSelection(0);
                 }
                 else if(MainActivity.p_id==0)
                 {
+                    concious_spinner.setSelection(0);
                     Toast.makeText(getActivity(), "Kindly Select a Patient First", Toast.LENGTH_LONG).show();
                 }
             }
@@ -413,6 +479,82 @@ public class diagnosePatient extends Fragment{
 
             }
         });
+        btn_scoredata.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+
+                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                 final View mView = getActivity().getLayoutInflater().inflate(R.layout.upload_patient_diagnose, null);
+                 final Button yes_btn = (Button) mView.findViewById(R.id.upload_button);
+                 final Button no_btn = (Button) mView.findViewById(R.id.upload_cancel_button);
+                 editipaddress=(EditText) mView.findViewById(R.id.server_ip);
+
+
+                 yes_btn.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         dialog.dismiss();
+                         /*String commands = "Insert into Patien_Diagnose (Diagnose_Name,Temperature,Pulse,Blood_Pressure,Respiration,O2_Saturation,Conciousness_Level,P_Id) values ('"
+                                 + "Sample Diagnose" + "','" + temp_spinner.getItemAtPosition(0).toString() + "','" + pulse_spinner.getItemAtPosition(0).toString() + "','" + bp_spinner.getItemAtPosition(0).toString() + "','" + resp_spinner.getItemAtPosition(0).toString() + "','" + o2_spinner.getItemAtPosition(0).toString() + "','" + concious_spinner.getItemAtPosition(0).toString() + "','" + MainActivity.p_id
+                                 + "')";
+                         Toast.makeText(getActivity(), commands, Toast.LENGTH_SHORT).show();*/
+                         ip = editipaddress.getText().toString();
+                         con = ConnectionHelper(un, password, db, ip);
+
+                         try {
+
+                             String commands = "Insert into Patient_Diagnose (Diagnose_Name,Temperature,Pulse,Blood_Pressure,Respiration,O2_Saturation,Conciousness_Level,P_Id) values ('"
+                                     + "Sample Diagnose" + "','" + temp_spinner.getItemAtPosition(0).toString() + "','" + pulse_spinner.getItemAtPosition(0).toString() + "','" + bp_spinner.getItemAtPosition(0).toString() + "','" + resp_spinner.getItemAtPosition(0).toString() + "','" + o2_spinner.getItemAtPosition(0).toString() + "','" + concious_spinner.getItemAtPosition(0).toString() + "','" + MainActivity.p_id
+                                     + "')";
+                             // encodedImage which is the Base64 String
+                             PreparedStatement preStmt = con.prepareStatement(commands);
+                             preStmt.executeUpdate();
+                             Toast.makeText(getActivity(), "Data Uploaded Successfully", Toast.LENGTH_SHORT).show();
+
+                         }
+                         /*catch (SQLException ex) {
+                             Toast.makeText(getActivity(),
+                                     "Some Problem Occured While Uploading" + ex.toString(),
+                                     Toast.LENGTH_SHORT).show();
+
+                         } */catch (IOError ex) {
+                             // TODO: handle exception
+                             Toast.makeText(getActivity(),
+                                     "Some Problem Occured While Uploading" + ex.toString(),
+                                     Toast.LENGTH_SHORT).show();
+                         } catch (AndroidRuntimeException ex) {
+                             Toast.makeText(getActivity(),
+                                     "Some Problem Occured While Uploading" + ex.toString(),
+                                     Toast.LENGTH_SHORT).show();
+
+                         } catch (NullPointerException ex) {
+                             Toast.makeText(getActivity(),
+                                     "Some Problem Occured While Uploading" + ex.toString(),
+                                     Toast.LENGTH_SHORT).show();
+                         } catch (Exception ex) {
+                             Toast.makeText(getActivity(),
+                                     "Some Problem Occured While Uploading" + ex.toString(),
+                                     Toast.LENGTH_SHORT).show();
+                         } /*catch (FileNotFoundException e) {
+                    Toast.makeText(getApplicationContext(), "something wrong while encoding photos", Toast.LENGTH_SHORT).show();
+                }*/
+//                Toast.makeText(getApplicationContext(), "something wrong while uploading photo", Toast.LENGTH_SHORT).show();
+                     }
+                 });
+
+                 no_btn.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         dialog.dismiss();
+
+                     }
+
+                 });
+                 mBuilder.setView(mView);
+                 dialog = mBuilder.create();
+                 dialog.show();
+             }
+         });
 
     }
     public void recordconcious()
@@ -442,6 +584,8 @@ public class diagnosePatient extends Fragment{
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+
 
             }
         });
